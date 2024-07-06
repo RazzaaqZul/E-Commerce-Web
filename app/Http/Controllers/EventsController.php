@@ -2,21 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Console\Scheduling\Event;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class EventsController extends Controller
-{
-    public function show(Event $event)
+{   
+    public function index() : Response
     {
-        return Inertia::render('Event/Show', [
-            'event' => $event->only(
-                'id',
-                'title',
-                'start_date',
-                'description'
-            )
-            ]);
+         return Inertia::render('welcome', [
+            'user' => [
+                'name' => 'razzaaq'
+            ]
+        ]);
     }
 }
