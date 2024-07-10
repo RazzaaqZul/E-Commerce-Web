@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\EventsController;
+use App\Http\Controllers\UserController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +18,8 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', [EventsController::class, 'index']);
+// Route::post('/users')
+Route::get('/login', [UserController::class, 'login'])->name('login');
+Route::post('/login', [UserController::class, 'authenticate']);
+Route::get('/register', [UserController::class, 'register']);
+Route::post('/register', [UserController::class, 'doRegister']);
