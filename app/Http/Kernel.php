@@ -29,6 +29,9 @@ class Kernel extends HttpKernel
      * @var array<string, array<int, class-string|string>>
      */
     protected $middlewareGroups = [
+        /*
+             Menggunakan middleware yang bergantung pada sesi dan cookie. Seperti StartSession. Ini cocok untuk aplikasi yang menggunakan sesi untuk mengelola data pengguna yang login, seperti halaman web biasa.
+        */
         'web' => [
             \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
@@ -37,8 +40,13 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\HandleInertiaRequests::class,
+            
+
         ],
 
+        /*
+            Dirancang untuk komunikasi stateless, biasanya menggunakan token (seperti JWT) untuk otentikasi dan tidak menggunakan sesi. Ini cocok untuk API yang akan diakses oleh klien seperti aplikasi mobile atau frontend JavaScript.
+        */
         'api' => [
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
@@ -64,5 +72,6 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'middleware.guest' => \App\Http\Middleware\OnlyGuestMiddleware::class,
     ];
 }

@@ -36,9 +36,9 @@ class UserController extends Controller
 
         if(Auth::attempt($credentials )){
             Log::warning('Masuk Ke dalam Auth Attempt');
-            $request->session()->regenerate();
+            $request->session()->put("user", $credentials);
 
-            return to_route('api.dashboard');
+            return to_route('dashboard');
         }
 
         // Jika gagal
@@ -64,7 +64,7 @@ class UserController extends Controller
 
         if (User::where('email', $data['email'])->exists() || User::where('username', $data['username'])->exists()) {
             Log::error('Email or username already exists');
-            
+                
             // Render halaman register dengan pesan error
             return Inertia::render('Register', [
                 "error" => [

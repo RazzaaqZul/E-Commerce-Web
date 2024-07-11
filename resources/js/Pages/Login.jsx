@@ -8,6 +8,7 @@ const Login = ({ error }) => {
     useEffect(() => {
         setIsError(error?.message);
     }, [error]);
+
     const handleSubmit = (e) => {
         e.preventDefault();
         router.post("/login", {

@@ -11,10 +11,22 @@ const Resgister = ({ error }) => {
         address: "bekasi",
     });
     const [isError, setIsError] = useState(error);
+
     console.log(error);
+
     useEffect(() => {
         setIsError(error?.message);
     }, [error]);
+
+    const handleChange = (e) => {
+        const key = e.target.id;
+        const value = e.target.value;
+        setData((data) => ({
+            ...data,
+            [key]: value,
+        }));
+        setIsError(null);
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -32,7 +44,6 @@ const Resgister = ({ error }) => {
                     </>
                 )}
                 <form
-                    method="POST"
                     onSubmit={handleSubmit}
                     className="flex flex-col justify-center items-center w-max "
                 >
@@ -45,10 +56,7 @@ const Resgister = ({ error }) => {
                             type="email"
                             name="email"
                             value={data.email}
-                            onChange={(e) => {
-                                setData({ ...data, email: e.target.value });
-                                setIsError(null);
-                            }}
+                            onChange={handleChange}
                             required
                             autoFocus
                             className="form-input rounded-xl mt-1 block w-full"
@@ -64,10 +72,7 @@ const Resgister = ({ error }) => {
                             type="text"
                             name="username"
                             value={data.username}
-                            onChange={(e) => {
-                                setData({ ...data, username: e.target.value });
-                                setIsError(null);
-                            }}
+                            onChange={handleChange}
                             required
                             autoFocus
                             className="form-input rounded-xl mt-1 block w-full"
@@ -83,10 +88,7 @@ const Resgister = ({ error }) => {
                             type="text"
                             name="fullname"
                             value={data.fullname}
-                            onChange={(e) => {
-                                setData({ ...data, fullname: e.target.value });
-                                setIsError(null);
-                            }}
+                            onChange={handleChange}
                             required
                             autoFocus
                             className="form-input rounded-xl mt-1 block w-full"
@@ -101,10 +103,7 @@ const Resgister = ({ error }) => {
                             id="gender"
                             name="gender"
                             value={data.gender}
-                            onChange={(e) => {
-                                setData({ ...data, gender: e.target.value });
-                                setIsError(null);
-                            }}
+                            onChange={handleChange}
                             required
                             autoFocus
                             className="form-select rounded-xl mt-1 block w-full"
@@ -124,10 +123,7 @@ const Resgister = ({ error }) => {
                             type="text"
                             name="address"
                             value={data.address}
-                            onChange={(e) => {
-                                setData({ ...data, address: e.target.value });
-                                setIsError(null);
-                            }}
+                            onChange={handleChange}
                             required
                             autoFocus
                             className="form-input rounded-xl mt-1 block w-full"
@@ -146,10 +142,7 @@ const Resgister = ({ error }) => {
                             type="password"
                             name="password"
                             value={data.password}
-                            onChange={(e) => {
-                                setData({ ...data, password: e.target.value });
-                                setIsError(null);
-                            }}
+                            onChange={handleChange}
                             required
                             className="form-input rounded-xl mt-1 block w-full"
                         />
