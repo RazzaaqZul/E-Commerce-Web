@@ -1,4 +1,4 @@
-import { router } from "@inertiajs/react";
+import { Head, Link, router } from "@inertiajs/react";
 import moment from "moment-timezone";
 import React, { useEffect, useState } from "react";
 
@@ -39,53 +39,72 @@ const DetailProduct = ({ detailProduct }) => {
 
         setModal(true);
     };
+
+    const handleCheckOut = () => {
+        router.get(
+            `/users/products/${detail[0].id_product}/orders`,
+            {
+                price,
+                quantity,
+            },
+            {
+                replace: false,
+                onBefore: () => confirm("Apa anda yakin ingin Checkout"),
+            }
+        );
+    };
     return (
-        <main className="flex flex-col gap-10">
-            {detail.map(
-                ({ id_product, name, price, stock, description }, index) => (
-                    <div className="bg-gray-300 rounded-xl p-10" key={index}>
-                        <h1 className="text-xl font-bold">{name}</h1>
-                        <h2 className="text-lg font-semibold mb-2">{price}</h2>
-                        <h2>{stock}</h2>
-                        <p>{description}</p>
-                    </div>
-                )
-            )}
+        <>
+            <Head title="Product Detail" />
+            <main className="flex flex-col gap-10">
+                {detail.map(
+                    (
+                        { id_product, name, price, stock, description },
+                        index
+                    ) => (
+                        <div
+                            className="bg-gray-300 rounded-xl p-10"
+                            key={index}
+                        >
+                            <h1 className="text-xl font-bold">{name}</h1>
+                            <h2 className="text-lg font-semibold mb-2">
+                                {price}
+                            </h2>
+                            <h2>{stock}</h2>
+                            <p>{description}</p>
+                        </div>
+                    )
+                )}
 
-            <section className="flex flex-row justify-center items-center gap-8">
-                <button
-                    className="bg-blue-500 p-7 font-bold text-2xl rounded-full"
-                    onClick={handleIncrease}
-                >
-                    +
-                </button>
-                <h1 className="text-2xl">{quantity}</h1>
-                <button
-                    className="bg-red-500 p-7 font-bold text-2xl rounded-full"
-                    onClick={handleDecrease}
-                >
-                    -
-                </button>
-            </section>
+                <section className="flex flex-row justify-center items-center gap-8">
+                    <button
+                        className="bg-blue-500 p-7 font-bold text-2xl rounded-full"
+                        onClick={handleIncrease}
+                    >
+                        +
+                    </button>
+                    <h1 className="text-2xl">{quantity}</h1>
+                    <button
+                        className="bg-red-500 p-7 font-bold text-2xl rounded-full"
+                        onClick={handleDecrease}
+                    >
+                        -
+                    </button>
+                </section>
 
-            <aside className="flex justify-center items-center">
-                <h1 className="text-2xl font-bold">{price}</h1>
-            </aside>
-            <section className="flex justify-center items-center">
-                <button
-                    className="bg-green-400 p-4 rounded-xl font-bold"
-                    onClick={handleOrder}
-                >
-                    Order / Checkout
-                </button>
-            </section>
-
-            {modal && (
-                <>
-                    <h1 className="bg-red-300"> BERHASIL</h1>
-                </>
-            )}
-        </main>
+                <aside className="flex justify-center items-center">
+                    <h1 className="text-2xl font-bold">{price}</h1>
+                </aside>
+                <section className="flex justify-center items-center">
+                    <button
+                        className="bg-green-400 p-4 rounded-xl font-bold"
+                        onClick={handleCheckOut}
+                    >
+                        Checkout
+                    </button>
+                </section>
+            </main>
+        </>
     );
 };
 

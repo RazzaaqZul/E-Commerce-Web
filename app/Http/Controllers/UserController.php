@@ -18,24 +18,23 @@ class UserController extends Controller
 {
     private UserService $userService;
 
-    public function login() : Response
+    public function create() : Response
     {
-        Log::info('Masuk Ke Halaman Login');
-        return Inertia::render('Login');
+        return Inertia::render('Auth/Login');
     }
 
 
-
-    public function authenticate(Request $request)
+    /**
+     * Handle an incoming authentication request (Login).
+     */
+    public function store(Request $request)
     {
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required']
         ]);
-        Log::warning('Masuk Ke dalam authenticate' . json_encode($credentials));
 
         if(Auth::attempt($credentials )){
-            Log::warning('Masuk Ke dalam Auth Attempt');
             $request->session()->put("user", $credentials);
 
             return to_route('dashboard');

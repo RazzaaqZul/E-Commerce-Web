@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Head, Link, router } from "@inertiajs/react";
+import { Head, Link, router, usePage } from "@inertiajs/react";
 // import { Inertia } from "@inertiajs/inertia";
 
 const Dashboard = ({ dataProducts }) => {
     const [products, setProducts] = useState(dataProducts);
+    const { props } = usePage();
+    const username = props.auth.user.username;
+    const address = props.auth.user.address;
 
     console.log(dataProducts);
 
@@ -12,6 +15,7 @@ const Dashboard = ({ dataProducts }) => {
             <Head title="Dashboard" />
             <h1 className="text-3xl font-bold underline">Welcome</h1>
             <p>Hello Dashboard</p>
+            <p>Hello {username}</p>
             <div className="flex flex-row gap-2 justify-center ">
                 {products.map(
                     (

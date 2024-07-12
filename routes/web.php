@@ -23,8 +23,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [EventsController::class, 'index']);
 // Route::post('/users')
-Route::get('/login', [UserController::class, 'login'])->name('login');
-Route::post('/login', [UserController::class, 'authenticate']);
+Route::get('/login', [UserController::class, 'create'])->name('login');
+Route::post('/login', [UserController::class, 'store'])->name('login.store');
 Route::get('/register', [UserController::class, 'register']);
 Route::post('/register', [UserController::class, 'doRegister']);
 
@@ -33,4 +33,7 @@ Route::get('/user/dashboard', [DashboardController::class, 'dashboard'])->middle
 
 Route::get('/users/products/{productId}', [ProductController::class, 'getDetailProduct' ])->middleware('middleware.guest')->where('productId', '[0-9]+');
 Route::post('/users/orders', [OrderController::class, 'createOrder']);
+
+Route::get('/users/products/{productId}/orders', [OrderController::class, 'order']);
+// Route::get('/users/products/{productId}/orders', [OrderController::class, 'order']);
 // Route::get('/users/products', [DashboardController::class, 'getAllProduct'])->middleware('middleware.guest')->name('getAllProduct');
