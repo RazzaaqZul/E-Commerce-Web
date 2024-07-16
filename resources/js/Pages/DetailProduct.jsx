@@ -41,15 +41,22 @@ const DetailProduct = ({ detailProduct }) => {
     };
 
     const handleCheckOut = () => {
-        router.get(
-            `/users/products/${detail[0].id_product}/orders`,
+        router.post(
+            `/users/carts`,
             {
-                price,
+                id_product: detail[0].id_product,
                 quantity,
+                subtotal: price,
             },
             {
                 replace: false,
                 onBefore: () => confirm("Apa anda yakin ingin Checkout"),
+                onError: () => {
+                    confirm("error");
+                },
+                onSuccess: () => {
+                    router.get("/users/carts");
+                },
             }
         );
     };

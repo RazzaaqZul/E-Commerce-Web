@@ -41,8 +41,8 @@ class UserController extends Controller
         }
 
         // Jika gagal
-        return Inertia::render('Login', [
-            "error" => [ 
+        return Inertia::render('Auth/Login', [
+            "errors" => [ 
                 "message" => "username or password wrong!"
                 ]
         ]); 

@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { Head, router } from "@inertiajs/react";
-const Login = ({ error }) => {
+const Login = ({ errors }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [isError, setIsError] = useState(error);
-
-    useEffect(() => {
-        setIsError(error?.message);
-    }, [error]);
+    const [isError, setIsError] = useState();
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        router.post("/login", {
-            email,
-            password,
-        });
+        router.post(
+            "/login",
+            {
+                email,
+                password,
+            },
+            {
+                onSuccess: () => {},
+                onError: () => setIsError(errors?.message),
+            }
+        );
     };
 
     return (
