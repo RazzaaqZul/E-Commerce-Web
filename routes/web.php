@@ -40,4 +40,4 @@ Route::get('/users/products/{productId}/orders', [OrderController::class, 'order
 // Route::get('/users/products', [DashboardController::class, 'getAllProduct'])->middleware('middleware.guest')->name('getAllProduct');
 Route::get('/users/carts', [CartController::class, 'index']);
 Route::post('/users/carts', [CartController::class, 'addCart']);
-Route::delete('/users/carts/{cartId}', [CartController::class, 'deleteCart']);
+Route::delete('/users/carts/{cartId}/products/{productId}', [CartController::class, 'deleteCart']);

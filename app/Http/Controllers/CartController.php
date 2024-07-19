@@ -55,31 +55,60 @@ class CartController extends Controller
         // Get the authenticated user
         $user = Auth::user();
         $userId = $user->id_user;
+        
+        // Filter product
+        // $cartCheck = Cart::where('fk_id_user', $user->id_user)->get();
 
-        // Create a new cart instance and save it
-        $cart = new Cart();
-        $cart->fk_id_user = $userId;
-        $cart->save();
+        // Get the user's cart or create a new one if it doesn't exist
+        Log::info($userId);
+        $cart = Cart::firstOrCreate(['fk_id_user' => $userId]);
 
-        // Attach the product to the cart with additional pivot data
-        $cart->cartHasManyProducts()->attach($validatedData['id_product'], [
-            'quantity' => $validatedData['quantity'],
-            'subtotal' => $validatedData['subtotal']
-        ]);
+        // Check if the product already exists in the cart
+        $existingProduct = $cart->cartHasManyProducts()
+        ->where('table_carts_products.id_product', $validatedData['id_product'])
+        ->first();
+
+        if($existingProduct) {    
+            // Update the existing product's quantity and subtotal
+            $cart->cartHasManyProducts()->updateExistingPivot($existingProduct->id_product, [
+                'quantity' => $validatedData['quantity'],
+                'subtotal' => $validatedData['subtotal']
+            ]);
+         } else {
+            // Attach the product to the cart with additional pivot data
+            $cart->cartHasManyProducts()->attach($validatedData['id_product'], [
+                'quantity' => $validatedData['quantity'],
+                'subtotal' => $validatedData['subtotal']
+            ]);
+         }
+
+
+      
     }
 
-    public function deleteCart(int $cartId) {
+    public function deleteCart(int $cartId, int $productId) {
         $user = Auth::user();
         
         // Retrieve the cart with the given ID that belongs to the authenticated user
-        $cart = Cart::where('fk_id_user', $user->id_user)->where('id_cart', $cartId)->first();
+        $cart = Cart::where('fk_id_user', $user->id_user)
+        ->where('id_cart', $cartId)
+        ->first();
 
         if ($cart) {
-            // Detach all products associated with this cart
-            $cart->cartHasManyProducts()->detach();
-
-            // Delete the cart itself
-            $cart->delete();
+            // Check if the product exists in the cart
+            $product = $cart->cartHasManyProducts()->where('table_carts_products.id_product', $productId)->first();
+    
+            if ($product) {
+                // Detach the specific product from the cart
+                $cart->cartHasManyProducts()->detach($productId);
+                
+                // Check if the cart is empty, and delete the cart if it is
+                if ($cart->cartHasManyProducts()->count() == 0) {
+                    $cart->delete();
+                }
+            } else {
+                Log::warning('Product not found in the cart');
+            }
         } else {
             Log::warning('Cart not found or does not belong to the authenticated user');
         }

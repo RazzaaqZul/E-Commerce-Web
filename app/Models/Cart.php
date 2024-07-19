@@ -15,6 +15,10 @@ class Cart extends Model
     public $incrementing = true;
     public $timestamps = false;
 
+    protected $fillable = [
+        'fk_id_user',
+    ];
+
     public function user() : BelongsTo {
         return $this->belongsTo(User::class, 'fk_id_user', 'id_user');
     }
